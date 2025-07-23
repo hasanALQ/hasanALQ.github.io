@@ -5,12 +5,12 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-// 🔒 Replace these with your actual PostgreSQL info
+
 const pool = new Pool({
-  user: 'postgres',          // your PostgreSQL username
+  user: 'hasanALQ',          
   host: 'localhost',
-  database: 'your_db_name',  // the name of your database
-  password: 'your_password', // your PostgreSQL password
+  database: 'Gradebook', 
+  password: '12345',
   port: 5432,
 });
 
