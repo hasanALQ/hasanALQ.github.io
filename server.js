@@ -1,37 +1,33 @@
 const express = require('express');
-const { Pool } = require('pg');
-const path = require('path');
-
 const app = express();
 const port = 3000;
 
-
+// Setup PostgreSQL connection
+const { Pool } = require('pg');
 const pool = new Pool({
-  user: 'hasanALQ',          
+  user: 'postgres',       
   host: 'localhost',
-  database: 'Gradebook', 
-  password: '12345',
+  database: 'GradeBook',   
+  password: 'your_password',   // replace with your DB password
   port: 5432,
 });
 
-// Serve HTML and public files
-app.use(express.static(__dirname));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+// Serve static files (including your gradebook.html and public folder)
+app.use(express.static('public'));  // adjust if your files are elsewhere
 
-// API route to get grades
-app.get('/api/grades', async (req, res) => {
+// Define route to serve grades data
+app.get('/grades', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT first_name, last_name, assignment1, assignment2, assignment3 FROM grades'
-    );
+    const query = 'SELECT student_id, student_name, assignment, score, total_points FROM grades_table;'; // adjust table/columns names
+    const result = await pool.query(query);
     res.json(result.rows);
   } catch (err) {
     console.error('Error querying database:', err);
-    res.status(500).send('Server error');
+    res.status(500).send('Error fetching grades');
   }
 });
 
-// Start the server
+// Start server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server listening at http://localhost:${port}`);
 });
